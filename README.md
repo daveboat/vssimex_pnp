@@ -5,7 +5,7 @@ Scheme with Application to the Poisson-Nernst-Planck Equations](https://www.arxi
 
 Unfortunately, as this work was done as part of my doctoral work which has since wrapped up, I am no longer actively maintaining it, and it is somewhat disorganized as a result of modifications over the course of my PhD. Though the code should be relatively straightforward to modify if you wish to run your own custom simulations, feel free to ask me any questions about the papers or the code by submitting an issue. Specifics for parts of the code are documented below.
 
-## Notes for code pertaining to *Adaptive Time-stepping Schemes for the Solution of the Poisson-Nernst-Planck Equations*
+## Notes for code pertaining to **Adaptive Time-stepping Schemes for the Solution of the Poisson-Nernst-Planck Equations**
 
 The following entry points are set up to create the results in Tables 2 and 3 of [Adaptive Time-stepping Schemes for the Solution of the Poisson-Nernst-Planck Equations](https://www.arxiv.org): 
 
@@ -15,11 +15,13 @@ The following entry points are set up to create the results in Tables 2 and 3 of
 
 For each of these scripts, you can change the value of epsilon (the nondimensionalized Debye length) at the beginning of the scripts to run with a different value, as these are intended to be sweeps in epsilon. You can turn on per-step console output by uncommenting the various ```display(sprintf('n=%d,err=%.3g,time=%.3g,dt=%.3g,c=%d',n,err,t(n),dt,c));``` lines in ```run.m```, ```run_fully_implicit.m```, and ```run_fully_implicit_fsolve.m```.
 
+In order to recreate the convergence test results in Table 1 of [Adaptive Time-stepping Schemes for the Solution of the Poisson-Nernst-Planck Equations](https://www.arxiv.org), run ```convergence_test.m```. This runs the convergence test for the SBDF2 stepping scheme (but can be modified to call ```run_fully_implicit.m``` instead of ```run.m``` to run the convergence test on BDF2). In order to use one of the "direct" boundary conditions on concentration instead of ghost points, you will have to go into ```concentration.m``` and manually comment out lines ```38-49``` and uncomment either lines ```59-67``` for a two-point stencil direct method, or lines ```71-73```, ```76-86``` and ```89-95``` for a three-point stencil.
+
 In order to perform simulations with custom parameters, see ```parameters.m```, which contains all of the physical constants (epsilon is commented out because it is being set elsewhere). You will also need to set the simulation hyperparameters (spatial and temporal discretization parameters), and set initial conditions on c\_p and c\_m. Examples of how to do this are in the existing code. Note that smaller epsilons require a larger number of spatial mesh points to resolve.
 
 Finally, set ```bc=1``` for voltage boundary conditions (voltage as a function of time is set in ```voltage.m```) or ```bc=0``` for current boundary conditions (current as a function of time is set in ```cur.m```)
 
-## Notes for code pertaining to *A Study of the Numerical Stability of an ImEx Scheme with Application to the Poisson-Nernst-Planck Equations*
+## Notes for code pertaining to **A Study of the Numerical Stability of an ImEx Scheme with Application to the Poisson-Nernst-Planck Equations**
 
 To create a collection of steady state solutions, one for each value
 of epsilon: run the script ```find_steady_state.m```  This creates a file

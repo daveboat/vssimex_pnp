@@ -49,6 +49,51 @@ b(N)=(1+w)*c_now(N) - w^2/(1+w)*c_old(N) ...
     + w*dt_now/(dx(N-1)/2)*D/D_0*( z*(c_old(N-1)+c_old(N))/(1 + 1 ) * (phi_old(N)-phi_old(N-1))/dx(N-1)  + j_right_old );
 
 
+% Using the direct method rather than the ghost point method.  Have 
+% flux = BC, i.e. D/D_0( - c_x - z c phi_x) = j 
+% and so                   -c_x - z c phi_x = D_0/D j
+% and so                               -c_x = z c phi_x + D_0/D j = RHS
+% the RHS is extrapolated forward in time with (1+w) RHS_new - w RHS_old
+% and the LHS is handled implicitly with -c_new_x.  The first derivatives
+% are approximated using a two-point stencil
+% A(1,2) = -1/dx(1);
+% A(1,1) = 1/dx(1);
+% b(1) = (1+w)*( z*((c_now(1)+c_now(2))/2)*(phi_now(2)-phi_now(1))/dx(1) + (D_0/D)*j_left_now)...
+%     - w*( z*((c_old(1)+c_old(2))/2)*(phi_old(2)-phi_old(1))/dx(1) + (D_0/D)*j_left_old);
+% 
+% A(N,N) = - 1/dx(N-1);
+% A(N,N-1) = 1/dx(N-1);
+% b(N) = (1+w)*( z*((c_now(N-1)+c_now(N))/2)*(phi_now(N)-phi_now(N-1))/dx(N-1) + (D_0/D)*j_right_now)...
+%     - w*( z*((c_old(N-1)+c_old(N))/2)*(phi_old(N)-phi_old(N-1))/dx(N-1) + (D_0/D)*j_right_old);
+
+
+% % another approach to the direct method but using 3 point stencils...
+% a0 = -(2*dx(1)+dx(2))/(dx(1)*(dx(1)+dx(2)));
+% a1 = 1/dx(1) + 1/dx(2);
+% a2 = - dx(1)/(dx(2)*(dx(1)+dx(2)));
+% % the three point stencil approximation of f'(x) is a0 f(x0) + a1 f(x1) + a2 f(x2)
+% % we want -c_new_x
+% A(1,1) = - a0;
+% A(1,2) = - a1;
+% A(1,3) = - a2;
+% phi_now_x = a0*phi_now(1) + a1*phi_now(2) + a2*phi_now(3);
+% phi_old_x = a0*phi_old(1) + a1*phi_old(2) + a2*phi_old(3);
+% b(1) = (1+w)*( z*((c_now(1)+c_now(2))/2)*phi_now_x + (D_0/D)*j_left_now)...
+%     - w*( z*((c_old(1)+c_old(2))/2)*phi_old_x + (D_0/D)*j_left_old);
+% %
+% a0 = (2*dx(N-1)+dx(N-2))/(dx(N-1)*(dx(N-1)+dx(N-2)));
+% am1 = -(1/dx(N-1) + 1/dx(N-2));
+% am2 = dx(N-1)/(dx(N-2)*(dx(N-1)+dx(N-2)));
+% % the three point stencil approximation of f'(x) is a0 f(x(N)) + am1 f(x(N-1)) + am2 f(x(N-2))
+% % we want - c_new_x
+% A(N,N-2) = -am2;
+% A(N,N-1) = -am1;
+% A(N,N) = -a0;
+% phi_now_x = am2*phi_now(N-2)+am1*phi_now(N-1)+a0*phi_now(N);
+% phi_old_x = am2*phi_old(N-2)+am1*phi_old(N-1)+a0*phi_old(N);
+% b(N) = (1+w)*( z*((c_now(N-1)+c_now(N))/2)*phi_now_x + (D_0/D)*j_right_now)...
+%     - w*( z*((c_old(N-1)+c_old(N))/2)*phi_old_x + (D_0/D)*j_right_old);
+
 c_new=A\b;
 
 end
