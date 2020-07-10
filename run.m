@@ -10,8 +10,6 @@ phi_now=phi(:,n);
 [j_f(n),j_d(n),j(n),v(n)]=postprocess(bc,dx,N1,N2,N3,t(n),Inf,cp(:,n),cm(:,n),phi(:,n),zeros(N,1),phi_x_right(n),lambda_s,D_0,D_p,D_m,kc_left,jr_left,kc_right,jr_right,epsilon_1,epsilon_2,epsilon_3,epsilon_s_left,epsilon_s_right,z_cp,z_cm);
 
 
-% flag=0;
-
 %first time step
 %coarse step
 [cp_coarse,cm_coarse,phi_x_right_coarse,debug1_coarse ] = step(bc,t_now,dt,Inf,dx,N1,N2,N3,cp_now,cm_now,phi_now,phi_x_right_now,ones(N,1),ones(N,1),ones(N,1),0,lambda_s,D_0,D_p,D_m,kc_left,jr_left,kc_right,jr_right,epsilon_1,epsilon_2,epsilon_3,epsilon_s_left,epsilon_s_right,z_cp,z_cm);
@@ -188,8 +186,8 @@ end
 
 
 
-runtime=toc(start);
-fprintf('Runtime: %d minutes and %f seconds\n',floor(runtime/60),rem(runtime,60));
+% runtime=toc(start);
+% printf('Runtime: %d minutes and %f seconds\n',floor(runtime/60),rem(runtime,60));
 % plot(t(1:end-1),log10(diff(t)),'k-','Linewidth',1);
 % xlabel('Time','FontSize',14);ylabel('$log_{10}(dt)$','Interpreter','LaTex','FontSize',14)
 

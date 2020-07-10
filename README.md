@@ -19,7 +19,9 @@ In order to recreate the convergence test results in Table 1 of [Adaptive Time-s
 
 In order to perform simulations with custom parameters, see ```parameters.m```, which contains all of the physical constants (epsilon is commented out because it is being set elsewhere). You will also need to set the simulation hyperparameters (spatial and temporal discretization parameters), and set initial conditions on c\_p and c\_m. Examples of how to do this are in the existing code. Note that smaller epsilons require a larger number of spatial mesh points to resolve.
 
-Finally, set ```bc=1``` for voltage boundary conditions (voltage as a function of time is set in ```voltage.m```) or ```bc=0``` for current boundary conditions (current as a function of time is set in ```cur.m```)
+Set ```bc=1``` for voltage boundary conditions (voltage as a function of time is set in ```voltage.m```) or ```bc=0``` for current boundary conditions (current as a function of time is set in ```cur.m```)
+
+Finally, Richardson Extrapolation is turned off (i.e. commented out) in this code because we were testing for numerical properties rather than running optimal simulations, so the time step update is directly equal to the "coarse" values, instead of blending "coarse" and "fine" values. If you want to run this code to actually simulate the PNP-FBV equations, Richardson Extrapolation should be turned on -- extrapolation will result in higher order accuracy for the local truncation error, and ultimately faster runtimes. You can find the commented out code in the various ```run_xxx.m``` files.
 
 ## Notes for code pertaining to **A Study of the Numerical Stability of an ImEx Scheme with Application to the Poisson-Nernst-Planck Equations**
 
